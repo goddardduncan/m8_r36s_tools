@@ -42,7 +42,7 @@ rule C_EXECUTABLE_LINKER__m8_wavs_download
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake -S/home/ark/git/m8/SampleBrowser -B/home/ark/git/m8/SampleBrowser/build
+  command = /usr/bin/cmake -S/home/ark/git/m8/M8SliceGlitch -B/home/ark/git/m8/M8SliceGlitch/build
   description = Re-running CMake...
   generator = 1
 

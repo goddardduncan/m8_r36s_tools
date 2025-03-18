@@ -1,3 +1,3 @@
-/home/ark/git/m8/SampleBrowser/build/CMakeFiles/rebuild_cache.dir
-/home/ark/git/m8/SampleBrowser/build/CMakeFiles/m8_wavs_download.dir
-/home/ark/git/m8/SampleBrowser/build/CMakeFiles/edit_cache.dir
+/home/ark/git/m8/M8SliceGlitch/build/CMakeFiles/rebuild_cache.dir
+/home/ark/git/m8/M8SliceGlitch/build/CMakeFiles/m8_wavs_download.dir
+/home/ark/git/m8/M8SliceGlitch/build/CMakeFiles/edit_cache.dir

@@ -1,4 +1,7 @@
-## For m8 tracker's sampler: https://m8slice.glitch.me - make a merged wav file with cue points from up to 32 separate wav files to use as a custom sampler instrument.
+First I made an m8 tracker sample kit creator: https://m8slice.glitch.me 
+you can use it to make a merged wav file with cue points from up to 32 separate wav files to use as a custom sampler instrument.
+
+I wanted to be able to do the whole process on an r36s.
 
 There are a suite of tools here to make and upload m8 sample kits to the SD card of a teensy m8 tracker using an R36s.  Using them you can:
 

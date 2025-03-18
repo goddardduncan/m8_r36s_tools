@@ -1,4 +1,4 @@
-There are a suite of tools here to make and upload m8 sample kits to the SD card of a teensy m8 tracker.  Using them you can:
+There are a suite of tools here to make and upload m8 sample kits to the SD card of a teensy m8 tracker using an R36s.  Using them you can:
 
 -Browse a library of samples, listen to them, and add them to a saved list of the ones you like
 -Merge these wavs and slice cue points into them into a saved file

@@ -1,0 +1,3 @@
+/home/ark/git/m8/pymergename/build/CMakeFiles/rebuild_cache.dir
+/home/ark/git/m8/pymergename/build/CMakeFiles/pymergename.dir
+/home/ark/git/m8/pymergename/build/CMakeFiles/edit_cache.dir

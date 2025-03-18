@@ -10,7 +10,7 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define FONT_SIZE 24
-#define DOWNLOAD_PATH "/roms/drums/"
+#define DOWNLOAD_PATH "/roms/drums/sliced"
 
 char *file_list[MAX_FILES]; // Store fetched filenames
 int file_count = 0;

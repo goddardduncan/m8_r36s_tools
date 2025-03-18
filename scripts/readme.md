@@ -1,4 +1,4 @@
-- Python script to merge/slice wav files for a m8 sample kit.  This partners with the /mergeslicepy/ app and is the script it requires to do its job:  merge_wav_name.py
-- Script to reload emulationstation: refresh.sh
-- Script to mount the movies folder on the SD card in TF2: mount_roms2.sh
-- Sometimes the USB unmounts in a buggy way.  This unmounts it: unmount_USB.sh
+- Python script to merge/slice wav files for a m8 sample kit.  This partners with the /mergeslicepy/ app and is the script it requires to do its job:  **merge_wav_name.py**
+- Script to reload emulationstation: **refresh.sh**
+- Script to mount the movies folder on the SD card in TF2: **mount_roms2.sh**
+- Sometimes the USB unmounts in a buggy way.  This unmounts it: **unmount_USB.sh**

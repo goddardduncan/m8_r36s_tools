@@ -1,4 +1,4 @@
-# H1 Save a kit to the SD card
+# Save a kit to the SD card
 *Press A to select menu items*
 
 This app: 

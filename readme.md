@@ -18,4 +18,4 @@ Check each sub folder for a description of each tool + code + executables (in bu
 To make the most of this, you need a USB C to microSD card reader dongle for your OTG on your R36s.
 To download files for m8slice.glitch.me you'll need to have an active internet connection on your r36s.  
 
-You can build a bunch of apps if you enable remote management on your r36s.  I recommend using https://github.com/dov/r36s-programming for how to do this.  Also cyberduck is a great tool for *finder*-like access to the files on the r36s.
+You can build/upload apps if you enable remote management on your r36s.  I recommend using https://github.com/dov/r36s-programming for instructions on how to setup a new "system" folder that you can run them from.  Also cyberduck is a great tool for *finder*-like access to the files on the r36s.

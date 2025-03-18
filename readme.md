@@ -1,5 +1,6 @@
 First I made an m8 tracker sample kit creator: https://m8slice.glitch.me 
-you can use it to make a merged wav file with cue points from up to 32 separate wav files to use as a custom sampler instrument.
+
+You can use it to make a merged wav file with cue points from up to 32 separate wav files to use as a custom sampler instrument.
 
 I wanted to be able to do the whole process on an r36s.
 
@@ -11,7 +12,7 @@ There are a suite of tools here to make and upload m8 sample kits to the SD card
 
 -Upload this file to your SD card to use on your M8 tracker
 
--Another app allows you to download files from https://m8slice.glitch.me that have been sliced already (you still need to upload them)
+-Another app allows you to download files from https://m8slice.glitch.me that have been sliced already (you still need to upload them to the SD card with the upload tool)
 
 Check each sub folder for a description of each tool + code + executables (in build folders).
 To make the most of this, you need a USB C to microSD card reader dongle for your OTG on your R36s.

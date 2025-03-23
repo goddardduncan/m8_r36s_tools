@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: R36s_Channel_Selector
+# Project: R36s_Radio_Selector
 # Configuration: 
 # =============================================================================
 
@@ -34,49 +34,49 @@ include rules.ninja
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ark/git/ff_menu/build && /usr/bin/cmake -S/home/ark/git/ff_menu -B/home/ark/git/ff_menu/build
+  COMMAND = cd /home/ark/git/ff_radio/build && /usr/bin/cmake -S/home/ark/git/ff_radio -B/home/ark/git/ff_radio/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
-# Object build statements for EXECUTABLE target channel_selector
+# Object build statements for EXECUTABLE target radio_selector
 
 
 #############################################
-# Order-only phony target for channel_selector
+# Order-only phony target for radio_selector
 
-build cmake_object_order_depends_target_channel_selector: phony || CMakeFiles/channel_selector.dir
-build CMakeFiles/channel_selector.dir/ff.c.o: C_COMPILER__channel_selector ../ff.c || cmake_object_order_depends_target_channel_selector
-  DEP_FILE = CMakeFiles/channel_selector.dir/ff.c.o.d
+build cmake_object_order_depends_target_radio_selector: phony || CMakeFiles/radio_selector.dir
+build CMakeFiles/radio_selector.dir/ffrad.c.o: C_COMPILER__radio_selector ../ffrad.c || cmake_object_order_depends_target_radio_selector
+  DEP_FILE = CMakeFiles/radio_selector.dir/ffrad.c.o.d
   FLAGS = -std=gnu11
   INCLUDES = -I/usr/include/SDL2 -I/usr/include/json-c
-  OBJECT_DIR = CMakeFiles/channel_selector.dir
-  OBJECT_FILE_DIR = CMakeFiles/channel_selector.dir
-  TARGET_COMPILE_PDB = CMakeFiles/channel_selector.dir/
-  TARGET_PDB = channel_selector.pdb
+  OBJECT_DIR = CMakeFiles/radio_selector.dir
+  OBJECT_FILE_DIR = CMakeFiles/radio_selector.dir
+  TARGET_COMPILE_PDB = CMakeFiles/radio_selector.dir/
+  TARGET_PDB = radio_selector.pdb
 
 # =============================================================================
-# Link build statements for EXECUTABLE target channel_selector
+# Link build statements for EXECUTABLE target radio_selector
 
 
 #############################################
-# Link the executable channel_selector
+# Link the executable radio_selector
 
-build channel_selector: C_EXECUTABLE_LINKER__channel_selector CMakeFiles/channel_selector.dir/ff.c.o
+build radio_selector: C_EXECUTABLE_LINKER__radio_selector CMakeFiles/radio_selector.dir/ffrad.c.o
   LINK_LIBRARIES = -lSDL2 -lSDL2_ttf -lSDL2 -ljson-c -lSDL2_ttf -ljson-c
-  OBJECT_DIR = CMakeFiles/channel_selector.dir
+  OBJECT_DIR = CMakeFiles/radio_selector.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = CMakeFiles/channel_selector.dir/
-  TARGET_FILE = channel_selector
-  TARGET_PDB = channel_selector.pdb
+  TARGET_COMPILE_PDB = CMakeFiles/radio_selector.dir/
+  TARGET_FILE = radio_selector
+  TARGET_PDB = radio_selector.pdb
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ark/git/ff_menu/build && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/ark/git/ff_radio/build && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 build edit_cache: phony CMakeFiles/edit_cache.util
@@ -94,7 +94,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 #############################################
 # The main all target.
 
-build all: phony channel_selector
+build all: phony radio_selector
 
 #############################################
 # Make the all target the default.

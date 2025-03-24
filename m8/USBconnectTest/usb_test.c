@@ -84,6 +84,10 @@ void run_sdl_ui() {
     run_command("lsusb", "USB Devices");
     run_command("dmesg | tail -20", "Kernel Messages");
     run_command("ls /dev/sd*", "Storage Devices");
+run_command("arecord -l");
+run_command("cat /proc/asound/cards");
+
+
 
     save_log_file(); // Save results to file
 

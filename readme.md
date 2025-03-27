@@ -24,3 +24,5 @@ You can build/upload apps if you enable remote management on your r36s.  I recom
 
 - Have got a few files to assist to run m8c on r36s (custom emulationstation theme, gamecontrollers.c, m8c_go.sh)
 - ff_menu and ff_radio are small apps to stream Melbourne TV and Radio (.json files go in /roms/tvradio/)
+
+**To enable SSH if turned off, copy the enable_ssh script to your ports folder.**

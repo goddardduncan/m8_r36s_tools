@@ -20,7 +20,10 @@ int selected_index = 0;
 char console_output[MAX_LINES][MAX_LINE_LEN];
 int console_lines = 0;
 SDL_Joystick *gGameController = NULL;
+SDL_Renderer *gRenderer = NULL;
+TTF_Font *gFont = NULL;
 
+void render_console();
 void log_message(const char *msg);  // forward declaration
 
 
@@ -42,7 +45,10 @@ void log_message(const char *msg) {
         strncpy(console_output[MAX_LINES - 1], msg, MAX_LINE_LEN - 1);
         console_output[MAX_LINES - 1][MAX_LINE_LEN - 1] = '\0';
     }
+
+    render_console(); // Force screen update right after logging
 }
+
 
 int convert_wav_to_mp3(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {
     if (typeflag == FTW_F && strstr(fpath, ".wav")) {
@@ -53,10 +59,21 @@ int convert_wav_to_mp3(const char *fpath, const struct stat *sb, int typeflag, s
         strncat(mp3_path, ".mp3", sizeof(mp3_path) - strlen(mp3_path) - 1);
 
         snprintf(cmd, sizeof(cmd), "ffmpeg -y -loglevel error -i '%s' '%s'", fpath, mp3_path);
+
+        // ✨ Add this log
+        const char *filename = strrchr(fpath, '/');
+	filename = filename ? filename + 1 : fpath;  // strip directory if present
+
+	char logbuf[256];
+	snprintf(logbuf, sizeof(logbuf), "[INFO] Converting: %s → %s", filename, strrchr(mp3_path, '/') ? strrchr(mp3_path, '/') + 1 : mp3_path);
+	log_message(logbuf);
+
+
         int c = system(cmd);
         if (c == 0) {
             log_message("[INFO] MP3 created.");
-            unlink(fpath); // Delete original .wav
+            unlink(fpath);
+            log_message("[INFO] WAV removed.");
         } else {
             log_message("[ERROR] Conversion failed.");
         }
@@ -110,9 +127,18 @@ void copy_renders_songs() {
 
     log_message("[INFO] Converting all WAVs to MP3...");
     nftw("/roms/drums/renders", convert_wav_to_mp3, 10, FTW_PHYS);
+    log_message("[INFO] Unmounting USB...");
+    int status = system("sudo umount /USB");
+    if (status == 0) {
+        log_message("[SUCCESS] USB Unmounted.");
+        system("sudo rm -rf /USB/*");
+    } else {
+        log_message("[ERROR] Unmount Failed.");
+    }
 }
 
 void upload_to_github() {
+    log_message("[INFO] Initiate GitHub upload.");
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     char timestamp[64];
@@ -132,7 +158,7 @@ void upload_to_github() {
         "git config --global user.email 'goddardduncan@gmail.com' && "
         "git config --global user.name 'goddardduncan' && "
         "git init && "
-        "(git remote | grep origin || git remote add origin TOKEN@github.com/goddardduncan/m8songs.git) && "
+        "(git remote | grep origin || git remote add origin [TOKEN]@github.com/goddardduncan/m8songs.git) && "
         "git add . && git commit -m 'Auto Backup' && git push -u origin master --force";
 
     int g = system(git_cmds);
@@ -172,6 +198,32 @@ void render_menu(SDL_Renderer *renderer, TTF_Font *font) {
 
     SDL_RenderPresent(renderer);
 }
+void render_console() {
+    if (!gRenderer || !gFont) return;
+
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(gRenderer);
+
+    SDL_Color color = {200, 200, 200};
+
+    for (int i = 0; i < 5; i++) {
+        render_text(gRenderer, gFont, menu_items[i], 50, 50 + i * FONT_SIZE, color, i == selected_index);
+    }
+
+    SDL_Rect console_box = {50, 180, 540, 200};
+    SDL_SetRenderDrawColor(gRenderer, 50, 50, 50, 255);
+    SDL_RenderFillRect(gRenderer, &console_box);
+
+    for (int i = 0; i < console_lines; i++) {
+        render_text(gRenderer, gFont, console_output[i], 60, 190 + i * 20, color, 0);
+    }
+
+    SDL_RenderPresent(gRenderer);
+
+    SDL_PumpEvents();    // ← Ensures SDL refreshes screen immediately
+    SDL_Delay(10);       // ← Optional, lets screen "breathe"
+}
+
 
 void run_menu() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0 || TTF_Init() < 0) {
@@ -180,8 +232,13 @@ void run_menu() {
     }
 
     SDL_Window *win = SDL_CreateWindow("USB Manager", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-    TTF_Font *font = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", FONT_SIZE);
+SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+TTF_Font *font = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", FONT_SIZE);
+
+// ✅ Set globals so render_console() works
+gRenderer = ren;
+gFont = font;
+
     if (!font) return;
 
     if (SDL_NumJoysticks() > 0) gGameController = SDL_JoystickOpen(0);

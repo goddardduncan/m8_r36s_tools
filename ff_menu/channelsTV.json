@@ -1,4 +1,5 @@
 {
+  "STREAM": "http://192.168.68.51:8080/stream.ts",
   "Channel-9*BROKEN*": "https://i.mjh.nz/.r/channel-9-vic.m3u8",
   "9 gem": "https://i.mjh.nz/.r/gem-vic.m3u8",
   "9 go": "https://i.mjh.nz/.r/go-vic.m3u8",

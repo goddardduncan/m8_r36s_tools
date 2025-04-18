@@ -1,1 +1,1 @@
-App to connect with my rpi server and stream content.  Server creates a python http server that serves file lists and content.  Client tees up content by instructing the server, which snips up mp4 files into HLS segments for streaming over internet.
+App to connect my r36s with my rpi server and stream content.  Server creates a python http server that serves file lists and media content.  Client tees up content by instructing the server, which snips up mp4 files into HLS segments for streaming over internet.  App plays content with ffplay.

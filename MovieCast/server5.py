@@ -13,7 +13,7 @@ import requests
 
 APP_ROOT = os.getcwd()
 MEDIA_DIR = os.path.join(APP_ROOT, "media")
-TMP_HLS_DIR = os.path.join(APP_ROOT, "tmp_hls5")
+TMP_HLS_DIR5 = os.path.join(APP_ROOT, "tmp_hls5")
 CACHE_FILE = os.path.join(APP_ROOT, "metadata_cache.json")
 
 PORT = 7070
@@ -81,7 +81,7 @@ def load_metadata():
 
 def hls_ready(file_param):
     base_name = re.sub(r'[^\w\-]', '_', file_param)
-    hls_dir = os.path.join(TMP_HLS_DIR, base_name)
+    hls_dir = os.path.join(TMP_HLS_DIR5, base_name)
     return os.path.exists(os.path.join(hls_dir, "playlist.m3u8"))
 
 def generate_hls(input_path, hls_dir):
@@ -107,7 +107,7 @@ def cleanup_old_hls():
         now = time.time()
         for folder in list(hls_last_access.keys()):
             if now - hls_last_access[folder] > HLS_EXPIRATION_SECONDS:
-                shutil.rmtree(os.path.join(TMP_HLS_DIR, folder), ignore_errors=True)
+                shutil.rmtree(os.path.join(TMP_HLS_DIR5, folder), ignore_errors=True)
                 hls_last_access.pop(folder)
 
 class HLSHandler(SimpleHTTPRequestHandler):
@@ -131,7 +131,7 @@ class HLSHandler(SimpleHTTPRequestHandler):
                 src_path = os.path.abspath(os.path.join(MEDIA_DIR, urllib.parse.unquote(file_param)))
                 if os.path.exists(src_path):
                     base_name = re.sub(r'[^\w\-]', '_', file_param)
-                    hls_dir = os.path.join(TMP_HLS_DIR, base_name)
+                    hls_dir = os.path.join(TMP_HLS_DIR5, base_name)
                     generate_hls(src_path, hls_dir)
                     hls_last_access[base_name] = time.time()
                     self.path = f"/tmp_hls5/{base_name}/playlist.m3u8"
@@ -354,7 +354,7 @@ def generate_html():
 
 if __name__ == "__main__":
 
-    os.makedirs(TMP_HLS_DIR, exist_ok=True)
+    os.makedirs(TMP_HLS_DIR5, exist_ok=True)
     load_metadata()
     threading.Thread(target=cleanup_old_hls, daemon=True).start()
     os.chdir(APP_ROOT)

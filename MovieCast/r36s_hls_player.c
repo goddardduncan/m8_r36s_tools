@@ -24,6 +24,8 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 TTF_Font *font = NULL;
+pid_t oga_pid = -1;
+void add_log(const char *fmt, ...);
 
 char *all_paths[MAX_ENTRIES];   // full list from backend
 int total_paths = 0;
@@ -40,6 +42,31 @@ int preparing_index = -1;
 
 char current_path[512] = "";
 pid_t ffplay_pid = -1;
+
+void launch_oga_controls() {
+    if (oga_pid > 0) return;  // already running
+
+    oga_pid = fork();
+    if (oga_pid == 0) {
+        execlp("sudo", "sudo", "/usr/local/bin/oga_controls", NULL);
+        exit(1);
+    }
+    add_log("[OGA] Started oga_controls (pid %d)", oga_pid);
+}
+
+void stop_oga_controls() {
+    if (oga_pid > 0) {
+        system("sudo kill $(pidof oga_controls)");
+        waitpid(oga_pid, NULL, 0);
+        add_log("[OGA] Stopped oga_controls via pidof");
+        oga_pid = -1;
+    } else {
+        // Fallback in case it was backgrounded with & or orphaned
+        system("sudo kill $(pidof oga_controls)");
+        add_log("[OGA] Fallback: killed oga_controls via pidof");
+        oga_pid = -1;
+    }
+}
 
 void add_log(const char *fmt, ...) {
     va_list args;
@@ -179,11 +206,12 @@ void stop_ffplay() {
         SDL_ShowWindow(window);
         add_log("[FFPLAY] Playback stopped");
     }
+    stop_oga_controls(); // Stop oga_controls after ffplay ends
 }
 
 void launch_ffplay(const char *filename) {
     stop_ffplay();
-
+    launch_oga_controls(); // Start oga_controls
     SDL_HideWindow(window);
 
     char fullpath[512];

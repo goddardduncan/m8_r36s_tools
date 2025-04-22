@@ -35,15 +35,17 @@ int file_count = 0;
 
 char *log_lines[MAX_LOG_LINES];
 int log_line_count = 0;
-
+int controls_enabled = 1;  // 1 = enabled, 0 = disabled
 int selected_index = 0;
 int top_index = 0;
 int preparing_index = -1;
-
+int running = 1;
 char current_path[512] = "";
 pid_t ffplay_pid = -1;
 
 void launch_oga_controls() {
+    controls_enabled = 0;
+    add_log("[OGA] Menu controls disabled");
     if (oga_pid > 0) return;  // already running
 
     oga_pid = fork();
@@ -66,6 +68,7 @@ void stop_oga_controls() {
         add_log("[OGA] Fallback: killed oga_controls via pidof");
         oga_pid = -1;
     }
+
 }
 
 void add_log(const char *fmt, ...) {
@@ -287,11 +290,28 @@ void render() {
     SDL_RenderPresent(renderer);
 }
 void handle_controls(SDL_Event event) {
+    static Uint8 button_states[16] = {0};  // Tracks button states persistently
+
+    if (event.type == SDL_JOYBUTTONDOWN || event.type == SDL_JOYBUTTONUP) {
+        button_states[event.jbutton.button] = (event.type == SDL_JOYBUTTONDOWN);
+    }
+
+    // Allow quit combo even if controls are disabled: SELECT (6) + START (7)
+    if (button_states[12] && button_states[13]) {
+        add_log("[INPUT] SELECT + START pressed. Quitting...");
+        stop_ffplay();         // includes stop_oga_controls
+        running = 0;
+        return;
+    }
+
+    // Block all other input when controls are disabled
+    if (!controls_enabled) return;
+
     if (event.type == SDL_JOYBUTTONDOWN) {
         switch (event.jbutton.button) {
+
             case 2:  // X = Quit
-                event.type = SDL_QUIT;
-                SDL_PushEvent(&event);
+                running = 0;
                 break;
 
             case 0:  // B = Stop playback
@@ -302,24 +322,21 @@ void handle_controls(SDL_Event event) {
                 const char *name = file_list[selected_index];
 
                 if (strcmp(name, "..") == 0) {
-                    // Go up
                     size_t len = strlen(current_path);
                     if (len == 0) return;
                     if (current_path[len - 1] == '/') current_path[len - 1] = '\0';
 
-                    // Remove last folder
                     char *last_slash = strrchr(current_path, '/');
                     if (last_slash) {
-                        *(last_slash + 1) = '\0';  // keep trailing slash
+                        *(last_slash + 1) = '\0';
                     } else {
-                        current_path[0] = '\0';  // go to root
+                        current_path[0] = '\0';
                     }
 
                     filter_current_folder();
                     selected_index = top_index = 0;
                 }
                 else if (name[strlen(name) - 1] == '/') {
-                    // Go deeper
                     if (strlen(current_path) + strlen(name) < sizeof(current_path) - 1) {
                         strcat(current_path, name);
                         filter_current_folder();
@@ -380,6 +397,7 @@ void handle_controls(SDL_Event event) {
         }
     }
 }
+
 void run_ui() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0 || TTF_Init() < 0) {
         fprintf(stderr, "SDL or TTF init failed.\n");
@@ -399,7 +417,7 @@ void run_ui() {
     if (!joystick) add_log("[WARN] No joystick detected");
 
     SDL_Event event;
-    int running = 1;
+    
 
     fetch_file_list();
     filter_current_folder();
